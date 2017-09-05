@@ -1,0 +1,14 @@
+{
+ "local":{
+  "ServerName" : "192.168.52.147",
+  "DbName":"WideWorldImporters",
+  "userId":"sa",
+  "userPwd":"123456"
+ },
+ "target":{
+  "ServerName" : "192.168.52.149",
+  "DbName":"WideWorldImporters",
+  "userId":"sa",
+  "userPwd":"123456"
+ }
+}
