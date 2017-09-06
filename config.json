@@ -1,13 +1,13 @@
 {
  "local":{
   "ServerName" : "192.168.52.147",
-  "DbName":"WideWorldImporters",
+  "DbName":"AdventureWorks2014",
   "userId":"sa",
   "userPwd":"123456"
  },
  "target":{
   "ServerName" : "192.168.52.149",
-  "DbName":"WideWorldImporters",
+  "DbName":"AdventureWorks2014",
   "userId":"sa",
   "userPwd":"123456"
  }

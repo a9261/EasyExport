@@ -1,13 +1,15 @@
 ﻿Import-Module Sqlps -DisableNameChecking;
 
 #--------------------------- Menu Generator Code ----------------------------------------------------------
+#Thanks the menu guideline 
+#http://mspowershell.blogspot.tw/2009/02/cli-menu-in-powershell.html
 $fcolor = $host.UI.RawUI.ForegroundColor
 $bcolor = $host.UI.RawUI.BackgroundColor
 $vkeycode = 0
 $pos = 0
  function DrawMenu {
     ## supportfunction to the Menu function below
-    param ($menuItems, $menuPosition, $menuTitel)
+    param ($menuItems, $menuPosition, $menuTitel,$displayNames)
     $fcolor = $host.UI.RawUI.ForegroundColor
     $bcolor = $host.UI.RawUI.BackgroundColor
     $l = $menuItems.length + 1
@@ -24,9 +26,17 @@ $pos = 0
     for ($i = 0; $i -le $l;$i++) {
         Write-Host "`t" -NoNewLine
         if ($i -eq $menuPosition) {
-            Write-Host "$($menuItems[$i])" -fore $bcolor -back $fcolor
+            if($menuItems[$i] -ne $null -and $displayNames.count -gt 0 -and $displayNames.ContainsKey($menuItems[$i]) ){
+                Write-Host "$($displayNames.Item($menuItems[$i]))" -fore $bcolor -back $fcolor
+            }else{
+                Write-Host "$($menuItems[$i])" -fore $bcolor -back $fcolor
+            }
         } else {
-            Write-Host "$($menuItems[$i])" -fore $fcolor -back $bcolor
+            if($menuItems[$i] -ne $null -and $displayNames.count -gt 0 -and $displayNames.ContainsKey($menuItems[$i]) ){
+                Write-Host "$($displayNames.Item($menuItems[$i]))" -fore $fcolor -back $bcolor
+            }else{
+                Write-Host "$($menuItems[$i])" -fore $fcolor -back $bcolor
+            }
         }
     }
 }
@@ -34,10 +44,10 @@ $pos = 0
 function Menu {
     ## Generate a small "DOS-like" menu.
     ## Choose a menuitem using up and down arrows, select by pressing ENTER
-    param ([array]$menuItems, $menuTitel = "MENU")
+    param ([array]$menuItems, $menuTitel = "MENU",$displayNames=@{})
     $vkeycode = 0
     $pos = 0
-    DrawMenu $menuItems $pos $menuTitel
+    DrawMenu $menuItems $pos $menuTitel $displayNames
     While ($vkeycode -ne 13) {
         $press = $host.ui.rawui.readkey("NoEcho,IncludeKeyDown")
         $vkeycode = $press.virtualkeycode
@@ -46,7 +56,7 @@ function Menu {
         If ($vkeycode -eq 40) {$pos++}
         if ($pos -lt 0) {$pos = 0}
         if ($pos -ge $menuItems.length) {$pos = $menuItems.length -1}
-        DrawMenu $menuItems $pos $menuTitel
+        DrawMenu $menuItems $pos $menuTitel $displayNames
     }
     Write-Output $($menuItems[$pos])
 }
@@ -63,12 +73,22 @@ $SQLServerVer = @{
 "Version120" = "MSSQL12.MSSQLSERVER"; 
 "Version130" = "MSSQL13.MSSQLSERVER"}
 
+$SQLServerNames = @{
+"Version80" = "Version80"; 
+"Version90" = "Version90"; 
+"Version100" = "SQL Server 2008"; 
+"Version105" = "SQL Server 2008 R2"; 
+"Version110" = "SQL Server 2012"; 
+"Version120" = "SQL Server 2014"; 
+"Version130" = "SQL Server 2016";
+"Version140" = "SQL Server 2017";
+}
 
 $dbVersion = [Enum]::GetNames('Microsoft.SqlServer.Management.Smo.SqlServerVersion')
  
 
 # First Choose Export dbVersion  
-$selectDbVersion = Menu $dbVersion "Please Choose Export target dbVersion"
+$selectDbVersion = Menu $dbVersion "Please Choose Export target dbVersion" $SQLServerNames
 
 
 if($selectDbVersion -ne $null){
