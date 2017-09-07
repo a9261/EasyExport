@@ -123,7 +123,7 @@ if($selectDbVersion -ne $null){
         $targetUserId  = Read-Host -Prompt  'Input your target db userID'
         $targetUserPwd = Read-Host -Prompt  'Input your target db userPwd'
     }else{
-        $obj = Get-Content .\config.json | ConvertFrom-Json
+        $obj = Get-Content .\config.json -Raw | ConvertFrom-Json
         $local  = $obj.local.ServerName
         $dbName = $obj.local.DbName 
         $userId = $obj.local.userId
@@ -185,37 +185,46 @@ if($selectDbVersion -ne $null){
     #Generator Database 
 
     $smoObjects.Add($db.Urn) 
-
+    Write-Host "Processing Database Schema"
     #Generator Schema 
+    
     foreach ($schema in $db.Schemas)
     {
     
        if ($schema.IsSystemObject -eq $FALSE)
        {
+          Write-Host "Processing schema $schema"
           $smoObjects.Add($schema.Urn)
        }
     }
      #Generator XmlSchema
     foreach ($schema in $db.XmlSchemaCollections)
     {
+              Write-Host "Processing XmlSchema $schema"
               $smoObjects.Add($schema.Urn)
     }
 
     #Generator User-Defined Data Types
     foreach ($userType in $db.UserDefinedDataTypes)
     {
+              Write-Host "Processing UserDefinedDataTypes $userType"
+          
           $smoObjects.Add($userType.Urn)
     }
 
     #Generator User-Defined Data Types
     foreach ($userType in $db.UserDefinedTableTypes)
     {
+              Write-Host "Processing UserDefinedTableTypes $userType"
+
           $smoObjects.Add($userType.Urn)
     }
 
     #Generator User-Defined Data Types
     foreach ($userType in $db.UserDefinedTypes)
     {
+              Write-Host "Processing UserDefinedTypes $userType"
+
           $smoObjects.Add($userType.Urn)
     }
 
@@ -225,6 +234,8 @@ if($selectDbVersion -ne $null){
        #$smoObjects = $tb.Urn
        if ($tb.IsSystemObject -eq $FALSE)
        {
+              Write-Host "Processing Tables $tb"
+
           $smoObjects.Add($tb.Urn)
        }
     }
@@ -234,6 +245,8 @@ if($selectDbVersion -ne $null){
        #$smoObjects = $tb.Urn
        if ($view.IsSystemObject -eq $FALSE)
        {
+              Write-Host "Processing Tables $view"
+
           $smoObjects.Add($view.Urn)
        }
     }
@@ -243,6 +256,8 @@ if($selectDbVersion -ne $null){
     {
        if ($fn.IsSystemObject -eq $FALSE)
        {
+              Write-Host "Processing UserDefinedFunctions $fn"
+
           $smoObjects.Add($fn.Urn)
        }
     }
@@ -252,6 +267,8 @@ if($selectDbVersion -ne $null){
     {
        if ($fn.IsSystemObject -eq $FALSE)
        {
+              Write-Host "Processing PartitionFunctions $fn"
+
           $smoObjects.Add($fn.Urn)
        }
     }
@@ -262,12 +279,16 @@ if($selectDbVersion -ne $null){
        #$smoObjects = $tb.Urn
        if ($trigger.IsSystemObject -eq $FALSE)
        {
+              Write-Host "Processing trigger $trigger"
+
           $smoObjects.Add($trigger.Urn)
        }
     }
     #Generator FullTextCatalogs
     foreach ($catalog in $db.FullTextCatalogs)
     {
+              Write-Host "Processing FullTextCatalogs $catalog"
+
           $smoObjects.Add($catalog.Urn)
     }
     #Generator StoredProcedure 
@@ -275,17 +296,17 @@ if($selectDbVersion -ne $null){
     {
        if ($sp.IsSystemObject -eq $FALSE)
        {
+              Write-Host "Processing StoredProcedures $sp"
+
           $smoObjects.Add($sp.Urn)
        }
     }
     #Generator Synonyms
     foreach ($synon in $db.Synonyms)
     {
-       #$smoObjects = $tb.Urn
-       if ($synon.IsSystemObject -eq $FALSE)
-       {
-          $smoObjects.Add($synon.Urn)
-       }
+        
+      Write-Host "Processing Synonyms $synon"
+      $smoObjects.Add($synon.Urn)
     }
 
 

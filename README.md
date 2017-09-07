@@ -2,9 +2,15 @@
 EasyExport is for SQL Server transform New version to Old version script 
 # A known issued
 1. If source database has enable Temporal Tables. Transfer will fail . because the old version SQL Server unsupported
+2. Because SQL Server scripter limit. when you export Full-text catalog. you need manually enable Full-text column on table
 # Enviroment Requirement
 Becuase this script will use **bcp** and **SMO**. You need install **SQL Server Management Studio** before start use this script 
 
+# Release note
+2017/09/07
+
+1.Fix script not generator Synonyms. 
+2.Fix some powershell cannot read config.json
 # How to Use 
 **Step 1. Setting config.json**
 ![Setting Config](Step1_SettingConfig.png)
