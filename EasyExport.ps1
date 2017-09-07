@@ -315,18 +315,18 @@ if($selectDbVersion -ne $null){
 
     # Change create database statement in init scripts 
     (Get-Content $outputPath | Out-String) -replace "CREATE DATABASE(?s).*?GO" , "
-    IF EXISTS ( select 1 from sys.databases where name = '$($db.Name)' )
+    IF EXISTS ( select 1 from sys.databases where name = '$($targetDbName)' )
     BEGIN
-     DROP DATABASE $($db.Name)
+     DROP DATABASE $($targetDbName)
     END 
-    CREATE DATABASE $($db.Name)
+    CREATE DATABASE $($targetDbName)
      CONTAINMENT = NONE
      ON  PRIMARY 
-    ( NAME = N'$($db.Name)_Data', FILENAME = N'C:\Program Files\Microsoft SQL Server\$($SQLServerVer.Item($selectDbVersion))\MSSQL\DATA\$($db.Name)_Data.mdf' , SIZE = 10176KB , MAXSIZE = UNLIMITED, FILEGROWTH = 16384KB )
+    ( NAME = N'$($targetDbName)_Data', FILENAME = N'C:\Program Files\Microsoft SQL Server\$($SQLServerVer.Item($selectDbVersion))\MSSQL\DATA\$($targetDbName)_Data.mdf' , SIZE = 10176KB , MAXSIZE = UNLIMITED, FILEGROWTH = 16384KB )
      LOG ON 
-    ( NAME = N'$($db.Name)_Log', FILENAME = N'C:\Program Files\Microsoft SQL Server\$($SQLServerVer.Item($selectDbVersion))\MSSQL\DATA\$($db.Name)_Log.ldf' , SIZE = 2048KB , MAXSIZE = 2048GB , FILEGROWTH = 16384KB )
+    ( NAME = N'$($targetDbName)_Log', FILENAME = N'C:\Program Files\Microsoft SQL Server\$($SQLServerVer.Item($selectDbVersion))\MSSQL\DATA\$($targetDbName)_Log.ldf' , SIZE = 2048KB , MAXSIZE = 2048GB , FILEGROWTH = 16384KB )
     GO
-    USE $($db.Name)
+    USE $($targetDbName)
     " | Out-File $outputPath
 
 
