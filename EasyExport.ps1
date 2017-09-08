@@ -320,7 +320,6 @@ if($selectDbVersion -ne $null){
      DROP DATABASE $($targetDbName)
     END 
     CREATE DATABASE $($targetDbName)
-     CONTAINMENT = NONE
      ON  PRIMARY 
     ( NAME = N'$($targetDbName)_Data', FILENAME = N'C:\Program Files\Microsoft SQL Server\$($SQLServerVer.Item($selectDbVersion))\MSSQL\DATA\$($targetDbName)_Data.mdf' , SIZE = 10176KB , MAXSIZE = UNLIMITED, FILEGROWTH = 16384KB )
      LOG ON 
